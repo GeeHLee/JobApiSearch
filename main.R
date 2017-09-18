@@ -1,13 +1,15 @@
 library(data.table)
 library(lubridate)
 library(stringr)
-source(paste0(getwd(),"/function.R"))
+library(taskscheduleR)
+source("C:/Users/liheng/Documents/RSCRIPTS/JOBSEARCH/jobApiSearch/function.R")
 
 today <- Sys.time()
 post_all <- c("assistante+marketing", "assistante+chef+projet")
 sort_by <- "date"
 
 for(post in post_all){
+  cat("update ", post, " table /n")
   filename <- paste0("old_jobs_", post, ".rds")
   jobs_1 <- telecharge_database(post, "date")
   jobs_2 <- telecharge_database(post, "relevance")
@@ -31,7 +33,10 @@ for(post in post_all){
   }
 }
 
-
-for(post in post_all){
-  sendNotification(post, "m.seksaoui@gmail.com")
+if(wday(today, label = T)=="Tues" & hour(today)==10){
+  for(post in post_all){
+    cat(paste0("sending ", post  ," mail... \n"))
+    sendNotification(post, "liheng87@gmail.com")
+  }
 }
+
