@@ -39,13 +39,14 @@ sendNotification <- function(post, recipents){
   library(mailR)
   library(htmlTable)
   library(data.table)
+  library(stringr)
   
   filename <- paste0("old_jobs_", post, ".rds")
   data <- as.data.table(readRDS(filename))
   data[, c("searchKey", "indeed", "redirection"):=NULL]
-  data[order(-rank(date))]
+  data <- data[order(-rank(date))]
   html_data <- htmlTable(data)
-  subject <- toupper(paste0("jobs for ", str_replace(post, "\\+", " ")))
+  subject <- toupper(paste0("jobs for ", str_replace_all(post, "\\+", " ")))
   
   sender <- "liheng87@gmail.com"
   send.mail(from = sender,
